@@ -26,13 +26,8 @@ class PSO(object):
             components as keys and their value as floating point as
             items. If `None` is passed, default update velocity rule
             is used with 'social' = 1.49445, 'cognitive' = 1.49445,
-            and 'inertia': 0.8. If FunctionType is passed, the specific
-            function is going to be used as update rule.
-            ... Note
-            `position`, `velocity`, `global_best`, `local_best` keywords
-            arguments must be passed to velocity_rule, in the reported
-            order when using FunctionType.
-        :type velocity_rule: NoneType, FunctionType or Dict, optional
+            and 'inertia': 0.8.
+        :type velocity_rule: NoneType, Dict, optional
         :param n_iter: number of iterations, defaults to 1000
         :type n_iter: int, optional
         """
@@ -373,7 +368,7 @@ class PSO(object):
             print(f"    Global best position: {list(self._global_best)}")
             print(f"    Global best value: {self._global_best_val}")
 
-    def plot_history(self):
+    def plot_history(self, n_points=80):
         """Plotting history for pso optimization."""
 
         import matplotlib.pyplot as plt
@@ -386,7 +381,6 @@ class PSO(object):
         fig, ax = plt.subplots()
         fig.subplots_adjust(bottom=0.25)
         plt.set_cmap('cool')
-        n_points = 80
         x = np.linspace(self._bd[0][0], self._bd[0][1], n_points)
         y = np.linspace(self._bd[1][0], self._bd[1][1], n_points)
         x_sp, y_sp = np.meshgrid(x, y)

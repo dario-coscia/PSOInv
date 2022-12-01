@@ -6,14 +6,14 @@ from scipy.integrate import odeint
 # Script adapted from https://scipython.com/blog/the-double-pendulum/
 
 
-# Hyperparameters
+# Hyperparameters.
 
 # Pendulum rod lengths (m), bob masses (kg).
-L1, L2 = 1.3, 3.8
-M1, M2 = 2.1, 1.7
+L1, L2 = 5.3, 3.8  # to be found via PSO
+M1, M2 = 2.1, 1.0
 
 # Maximum time, time point spacings and the time grid (all in s).
-tmax, dt = 10, 0.01
+tmax, dt = 10, 0.001
 t = np.arange(0, tmax + dt, dt)
 
 # Initial conditions: theta1, dtheta1/dt, theta2, dtheta2/dt.
@@ -23,18 +23,14 @@ y0 = np.array([3 * np.pi / 7, 0, 3 * np.pi / 4, 0])
 g = 9.81
 
 # PSO bounds (by definition parameters >0)
-bounds_L1 = np.array([0., 10.])
-bounds_L2 = np.array([0., 10.])
-bounds_m1 = np.array([0., 5.])
-bounds_m2 = np.array([0., 5.])
-bounds = [bounds_L1, bounds_L2, bounds_m1, bounds_m2]
+bounds_L1 = np.array([1e-4, 30.])
+bounds_L2 = np.array([1e-4, 30.])
+bounds = [bounds_L1, bounds_L2]
 
 # PSO velocities
 vel_L1 = np.array([0.0001, 0.5])
 vel_L2 = np.array([0.0001, 0.5])
-vel_m1 = np.array([0.0001, 0.5])
-vel_m2 = np.array([0.0001, 0.5])
-vel_particles = [vel_L1, vel_L2, vel_m1, vel_m2]
+vel_particles = [vel_L1, vel_L2]
 
 
 def deriv(y, t, L1, L2, m1, m2):
@@ -86,7 +82,7 @@ def fit(val):
 
         # for each particle find a solution
         (x1_hat, y1_hat, x2_hat, y2_hat) = solve_double_pendulum(
-            deriv, y0, t, v[0], v[1], v[2], v[3])
+            deriv, y0, t, v[0], v[1], M1, M2)
 
         # calculate error norm
         norm_x1 = np.linalg.norm(x1 - x1_hat, 2)
@@ -100,5 +96,6 @@ def fit(val):
     return res
 
 
-pso = PSO(20, bounds, vel_particles, fit, n_iter=800)
+pso = PSO(20, bounds, vel_particles, fit, n_iter=100)
 pso.fit(verbose=True)
+# pso.plot_history(20) # plotting history
