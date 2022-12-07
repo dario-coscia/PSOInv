@@ -73,5 +73,3 @@ def fit(val):
 
 pso = PSO(20, bounds, vel_particles, fit, n_iter=500)
 pso.fit(True)  # save optimization history
-# pso.plot_history()  # plotting history
-# pso.save_gif() # save gif

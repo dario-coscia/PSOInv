@@ -98,4 +98,3 @@ def fit(val):
 
 pso = PSO(20, bounds, vel_particles, fit, n_iter=100)
 pso.fit(verbose=True)
-# pso.plot_history(20) # plotting history
