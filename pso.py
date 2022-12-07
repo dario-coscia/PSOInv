@@ -33,6 +33,8 @@ class PSO(object):
         """
 
         self._history = None
+        self._global_best = None
+        self._global_best_val = None
 
         if isinstance(swarm_size, int):
             self._swarm_pts = swarm_size
@@ -463,3 +465,11 @@ class PSO(object):
         :rtype: list(np.array)
         """
         return self._history
+
+    @property
+    def global_best_position(self):
+        return self._global_best
+
+    @property
+    def global_best_value(self):
+        return self._global_best_val
