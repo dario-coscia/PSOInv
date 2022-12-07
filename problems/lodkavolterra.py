@@ -3,7 +3,7 @@ import numpy as np
 from scipy.integrate import solve_ivp
 
 
-# Lorenz paramters and initial conditions.
+# LodkaVolterra paramters and initial conditions.
 alpha, beta, gamma, delta = 1., 1., 1., 1.
 x0, y0 = 4., 2.
 tmax = 10
