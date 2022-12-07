@@ -24,8 +24,8 @@ particle’s neighborhood).
 
 In practice the update rule is written as:
 
-$$ 
-\pmb{v}_i(t+1) = w \cdot \pmb{v}_i(t) + c_{\rm{soc}} \cdot \pmb{r}_1 \otimes (\pmb{g} - \pmb{x}_i(t)) + c_{\rm{cog}} \cdot \pmb{r}_2 \otimes (\pmb{b}_i - \pmb{x}_i(t)),
+$$
+\pmb{v_i}(t+1) = w \cdot \pmb{v_i}(t) + c_{\rm{soc}} \cdot \pmb{r_1} \otimes (\pmb{g} - \pmb{x_i}(t)) + c_{\rm{cog}} \cdot \pmb{r_2} \otimes (\pmb{b_i} - \pmb{x_i}(t)),
 $$
 
 where:
@@ -80,8 +80,10 @@ $$
 
 where $\mathcal{A}$ is the mathematical differential operator, $\pmb{u}$ the solution, $\pmb{z}$ the spatio-temporal coordinates, $\pmb{f}$ the forcing term and $\alpha$ the set of paramenters. Furthemore, $\mathcal{B}$ identifies the operator indicating arbitrary initial or boundary conditions and $\pmb{g}$ the boundary function.
 
-Let $\alpha^{real}$ the real physical parameter that, inserted in *(1)* and solved the DE, generate our data $\{\pmb{u}_i^{real}(\pmb{z}_i)\}_{i=1}^N$. For a specific $\hat{\alpha}$, by solving the DE *(1)* we can find a solution $\hat{\pmb{u}}$. Hence, we can define a fitness as:
+Let $\alpha^{real}$ the real physical parameter that, inserted in *(1)* and solved the DE, generate our data $\pmb{u}^{real}$. For a specific $\hat{\alpha}$, by solving the DE *(1)* we can find a solution $\pmb{\hat{u}}$. Hence, we can define a fitness as:
+
 $$
-f(\hat{\alpha}) = || \pmb{u}^{real} - \hat{\pmb{u}} ||^2.
+f(\hat{\alpha}) = || \pmb{u}^{real} - \pmb{\hat{u}} ||^2.
 $$
+
 This function is clearly minimized when $\hat{\alpha} = \alpha^{real}$ since the solution is unique. In our research we identified each parameter with a "spatial dimension", and each particle is a vector of the DE parameters. Hence we evolved the parameters and we search for the optimial one, minimizing $f$. In the `problems` directory you can find different applications: accellerated motion, double pendulum, lodka volterra, lorentz attractor. 
