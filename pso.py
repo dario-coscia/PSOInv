@@ -35,6 +35,7 @@ class PSO(object):
         self._history = None
         self._global_best = None
         self._global_best_val = None
+        self._loss = None
 
         if isinstance(swarm_size, int):
             self._swarm_pts = swarm_size
@@ -115,6 +116,16 @@ class PSO(object):
         else:
             raise ValueError(
                 'expected python dict or None type for default.')
+
+    def save_state(self, file_name="pso"):
+        """Saving PSO Object
+
+        :param file_name: file where to save, defaults to "pso"
+        :type file_name: str, optional
+        """
+        import dill
+        with open(file_name + ".pkl", "wb") as file_:
+            dill.dump(self, file_)
 
     def fit(self, verbose=False):
         """Fit method for PSO class, performing PSO optimization.
@@ -337,6 +348,9 @@ class PSO(object):
         # save history of the particles' positions in a list
         history = [deepcopy(positions)]
 
+        # save loss
+        loss = []
+
         iterator_range = range(1, self._iter)
         if verbose:
             iterator_range = self._progressbar(iterator_range)
@@ -361,9 +375,13 @@ class PSO(object):
             global_best, global_best_val = self._evaluate_global_best(
                 local_best)
 
+            # saving loss
+            loss.append(global_best_val)
+
         self._global_best = global_best
         self._global_best_val = global_best_val
         self._history = history
+        self._loss = loss
 
         if verbose:
             print(f"Optimization Summary")
@@ -473,3 +491,19 @@ class PSO(object):
     @property
     def global_best_value(self):
         return self._global_best_val
+
+    @property
+    def fit_history(self):
+        return np.array(self._loss).reshape((-1,))
+
+
+def load_state(file_name):
+    """Utility function to load PSO Object
+
+    :param file_name: .pkl file where PSO Object is saved
+    :type file_name: str
+    :return: pso object
+    :rtype: PSO
+    """
+    import dill
+    return dill.load(open(file_name, "rb"))

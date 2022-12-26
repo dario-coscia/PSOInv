@@ -1,7 +1,9 @@
+import pickle
 from pso import PSO
 import numpy as np
 from scipy.integrate import solve_ivp
 
+saving = True
 
 # LodkaVolterra paramters and initial conditions.
 alpha, beta, gamma, delta = 1., 1., 1., 1.
@@ -51,7 +53,7 @@ data = create_data(tmax, x0, y0, alpha, beta, gamma, delta)
 # defining the fit
 
 
-def fit(val):
+def fitness(val):
     (x, y, _) = data
     res = np.empty(shape=(val.shape[0], 1))
 
@@ -71,5 +73,8 @@ def fit(val):
     return res
 
 
-pso = PSO(20, bounds, vel_particles, fit, n_iter=1500)
+pso = PSO(20, bounds, vel_particles, fitness, n_iter=1500)
 pso.fit(True)  # save optimization history
+
+if saving:
+    pso.save_state("lodkavolterra")

@@ -2,6 +2,8 @@ from pso import PSO
 import numpy as np
 from scipy.integrate import odeint
 
+saving = True
+
 # For the math see https://scipython.com/blog/the-double-pendulum/
 # Script adapted from https://scipython.com/blog/the-double-pendulum/
 
@@ -98,3 +100,6 @@ def fit(val):
 
 pso = PSO(20, bounds, vel_particles, fit, n_iter=100)
 pso.fit(verbose=True)
+
+if saving:
+    pso.save_state("double_pendulum")
