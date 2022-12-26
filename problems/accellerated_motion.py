@@ -1,6 +1,7 @@
 from pso import PSO
 import numpy as np
 
+saving = True
 
 # hyperparameters
 acceleration = 9.81
@@ -9,11 +10,12 @@ velocity = 3.16
 bounds_vel = np.array([-30., 30.])
 bounds_acc = np.array([-30., 30.])
 bounds = [bounds_vel, bounds_acc]
-vel_particles = [np.array([0.001, 0.5]), np.array([0.001, 0.5])]
+vel_particles = [np.array([0.001, 0.05]), np.array([0.001, 0.05])]
 
 
-def create_data(vel, acc, N=10000):  # make fake data
-    time = np.linspace(0., 10000, N)
+def create_data(vel, acc, N=1000):  # make fake data
+    # time domain = [0, 10] sec
+    time = np.linspace(0., 100, N)
     x = vel * time + 0.5 * acc * time ** 2
     return (x, time)
 
@@ -31,7 +33,10 @@ def fit(val):
     return res
 
 
-pso = PSO(15, bounds, vel_particles, fit, n_iter=1000)
+pso = PSO(50, bounds, vel_particles, fit, n_iter=5000)
 pso.fit(True)  # save optimization history
-pso.plot_history()  # plotting history
-# pso.save_gif() # save gif
+pso.plot_history()
+# pso.save_gif("Accelerated Motion History")  # save gif
+
+if saving:
+    pso.save_state("accelerated_motion")

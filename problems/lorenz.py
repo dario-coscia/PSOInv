@@ -2,6 +2,7 @@ from pso import PSO
 import numpy as np
 from scipy.integrate import solve_ivp
 
+saving = True
 
 # Lorenz paramters and initial conditions.
 sigma, beta, rho = 10, 2.667, 28
@@ -73,3 +74,6 @@ def fit(val):
 
 pso = PSO(20, bounds, vel_particles, fit, n_iter=500)
 pso.fit(True)  # save optimization history
+
+if saving:
+    pso.save_state("lorenz")
