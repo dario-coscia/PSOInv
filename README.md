@@ -67,7 +67,7 @@ By setting `velocity_rule=None` the default values for cognitive, social and ine
 ## Inverse Problems
 An inverse problem is a general framework that is used to convert observed measurements into information about a physical object or system that one is interested in. 
 
-In our case we consider a dinamical system described by a set of parametrical differential equation (DE), where we have measurements of the physical solution and we aim to find the parameters of the governing differential equation. Formally, consider the general form of a differential equation (for system of differential equation the formulation is analogous):
+In our case we consider a dynamical system described by a set of parametrical differential equation (DE), where we have measurements of the physical solution and we aim to find the parameters of the governing differential equation. Formally, consider the general form of a differential equation (for system of differential equation the formulation is analogous):
 
 $$
 \begin{equation}
