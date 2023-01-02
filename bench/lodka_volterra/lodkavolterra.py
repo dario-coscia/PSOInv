@@ -2,11 +2,9 @@ from pso import PSO
 import numpy as np
 from scipy.integrate import solve_ivp
 
-
 # LodkaVolterra paramters and initial conditions.
 alpha, beta, gamma, delta = 1., 1., 1., 1.
 x0, y0 = 4., 2.
-tmax = 10
 
 # PSO bounds (by definition parameters >0)
 bounds_alpha = np.array([0., 10.])
