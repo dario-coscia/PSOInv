@@ -34,12 +34,12 @@ def test_pso_fit():
     val = pso._global_best_val
     assert_allclose(val, np.zeros_like(val), rtol=0., atol=1e-5)
 
-    pso = PSO(10, bounds, vel, sphere, n_iter=1000)
+    pso = PSO(100, bounds, vel, sphere, n_iter=1000)
     pso.fit(False)
     val = pso._global_best_val
     assert_allclose(val, np.zeros_like(val), rtol=0., atol=1e-5)
 
-    pso = PSO(10, bounds, vel, ackley, n_iter=1000)
+    pso = PSO(100, bounds, vel, ackley, n_iter=1000)
     pso.fit(False)
     val = pso._global_best_val
     assert_allclose(val, np.zeros_like(val), rtol=0., atol=1e-5)
