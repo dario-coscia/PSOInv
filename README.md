@@ -72,7 +72,7 @@ where:
 The PSO implementation is written in `numpy`, which is the only requirement for using the `PSO` class. A simple example of how to use it is reported below:
 
 ```python
-from pso import PSO
+from psoinv import PSO
 import numpy as np
 
 # define fitness function to minimize
