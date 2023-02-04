@@ -1,6 +1,6 @@
 import sys
 import matplotlib.pyplot as plt
-from scheduler import Scheduler
+from .scheduler import Scheduler
 import numpy as np
 from types import FunctionType
 from copy import deepcopy
