@@ -36,6 +36,7 @@ class PSO(object):
         self._global_best = None
         self._global_best_val = None
         self._loss = None
+        self._found_new = True  # if a new local best is found
 
         if isinstance(swarm_size, int):
             self._swarm_pts = swarm_size
@@ -262,7 +263,7 @@ class PSO(object):
         sign_velocity = np.random.choice([-1, 1], size=size)
         return velocities * sign_velocity
 
-    def _evaluate_global_best(self, positions):
+    def _evaluate_global_best(self, local_best, fit_local_best):
         """computing global best between particles
 
         :param positions: current position
@@ -271,18 +272,17 @@ class PSO(object):
         :rtype: np.array
         """
 
-        # find fit values
-        fit_val = self._fit(positions)
-
         # select minimum
-        min_idx = np.argmin(fit_val)
+        min_idx = np.argmin(fit_local_best)
 
         # update global best values and positions
-        global_best = positions[min_idx]
-        global_best_val = fit_val[min_idx]
+        global_best = local_best[min_idx]
+        global_best_val = fit_local_best[min_idx]
+
         return global_best, global_best_val
 
-    def _evaluate_local_best(self, local_best, positions):
+    def _evaluate_local_best(self, local_best, positions,
+                             fit_local_best, fit_positions, ):
         """computing local best for each particle
 
         :param local_best: old local best
@@ -294,11 +294,23 @@ class PSO(object):
         """
 
         # find new local bests
-        idx = np.where(self._fit(positions) < self._fit(local_best))[0]
+        idx = np.where(fit_positions < fit_local_best)[0]
+
+        # if no local best found we return
+        if idx.size == 0:
+            self._found_new = False
+            return local_best, fit_local_best
+
+        # if a new local best is found
+        self._found_new = True
 
         # update local_best array with the new local bests
         local_best[idx] = positions[idx]
-        return local_best
+
+        # update fitness local best
+        fit_local_best[idx] = fit_positions[idx]
+
+        return local_best, fit_local_best
 
     def _progressbar(self, it, size=60):
         """Simple progress bar
@@ -339,11 +351,13 @@ class PSO(object):
         positions = self._sample_positions()
         velocities = self._sample_velocities()
 
-        # find local best for each particle
+        # find local best for each particle and its fitness
         local_best = positions
+        fit_local_best = self._fit(local_best)
 
         # find global best between particles
-        global_best, global_best_val = self._evaluate_global_best(positions)
+        global_best, global_best_val = self._evaluate_global_best(
+            local_best, fit_local_best)
 
         # save history of the particles' positions in a list
         history = [deepcopy(positions)]
@@ -351,7 +365,7 @@ class PSO(object):
         # save loss
         loss = []
 
-        iterator_range = range(1, self._iter)
+        iterator_range = range(1, self._iter + 1)
         if verbose:
             iterator_range = self._progressbar(iterator_range)
 
@@ -368,12 +382,19 @@ class PSO(object):
             # save in history the positions
             history.append(deepcopy(positions))
 
+            # evaluate the fintess on the positions
+            fit_positions = self._fit(positions)
+
             # find local best
-            local_best = self._evaluate_local_best(local_best, positions)
+            local_best, fit_local_best = self._evaluate_local_best(local_best,
+                                                                   positions,
+                                                                   fit_local_best,
+                                                                   fit_positions)
 
             # find global best between particles
-            global_best, global_best_val = self._evaluate_global_best(
-                local_best)
+            if self._found_new:
+                global_best, global_best_val = self._evaluate_global_best(local_best,
+                                                                          fit_local_best)
 
             # saving loss
             loss.append(global_best_val)
