@@ -1,5 +1,5 @@
 '''Simple testing for pso'''
-from pso import PSO
+from psoinv import PSO
 import numpy as np
 from numpy.testing import assert_allclose
 
