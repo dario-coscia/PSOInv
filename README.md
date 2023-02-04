@@ -186,7 +186,7 @@ You can also download the bibtex format from the citation widget on the sidebar
 
 ## License
 
-See the [LICENSE](LICENSE.rst) file for license rights and limitations (MIT).
+See the [LICENSE](LICENSE) file for license rights and limitations (MIT).
 
 ## References
 To implement the package we follow these works:
