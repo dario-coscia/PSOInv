@@ -180,7 +180,7 @@ We'd love to accept your patches and contributions to this project. There are ju
 If you are considering using **psoinv** on your reaserch please cite us:
 
 ```bash
-
+Coscia, D. (2023). psoinv (Version 0.0.1) [Computer software]. https://github.com/dario-coscia/PSOInv
 ```
 You can also download the bibtex format from the citation widget on the sidebar
 
