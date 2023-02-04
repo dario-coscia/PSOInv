@@ -9,7 +9,7 @@ __all__ = [
     '__maintainer__',
     '__status__']
 
-__project__ = 'PSOinv'
+__project__ = 'psoinv'
 __title__ = "psoinv"
 __author__ = "Dario Coscia"
 __copyright__ = "Copyright 2022-2022, PSOinv contributors"

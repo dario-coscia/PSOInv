@@ -1,5 +1,6 @@
 import sys
 import matplotlib.pyplot as plt
+from scheduler import Scheduler
 import numpy as np
 from types import FunctionType
 from copy import deepcopy
@@ -37,6 +38,7 @@ class PSO(object):
         self._global_best_val = None
         self._loss = None
         self._found_new = True  # if a new local best is found
+        self._count_iter = 0
 
         if isinstance(swarm_size, int):
             self._swarm_pts = swarm_size
@@ -106,6 +108,10 @@ class PSO(object):
             self._parameters_vel = velocity_rule
             self._update_vel = self._standard_velocity_update
 
+        elif isinstance(velocity_rule, Scheduler):
+            self._scheduler = velocity_rule
+            self._update_vel = self._scheduler_velocity_update
+
         elif velocity_rule is None:
             velocity_rule = {'social': 1.49445,
                              'cognitive': 1.49445,
@@ -173,6 +179,26 @@ class PSO(object):
         # handle velocity using damping method
         velocity = self._handle_vel(velocity)
         return velocity
+
+    def _scheduler_velocity_update(self, position, velocity,
+                                   global_best, local_best):
+        """update velocity method using scheduler
+
+        :param position: current position
+        :type position: np.array
+        :param velocity: current velocity
+        :type velocity: np.array
+        :param global_best: global best between particles
+        :type global_best: np.array
+        :param local_best: local best for each particle
+        :type local_best: np.array
+        :return: updated velocity
+        :rtype: np.array
+        """
+        self._scheduler.update(self._count_iter)
+        self._parameters_vel = self._scheduler.parameters_dict
+        return self._standard_velocity_update(position, velocity,
+                                              global_best, local_best)
 
     def _update_position(self, current_position, current_velocity):
         """update position method
@@ -312,34 +338,6 @@ class PSO(object):
 
         return local_best, fit_local_best
 
-    def _progressbar(self, it, size=60):
-        """Simple progress bar
-
-        :param it: _description_
-        :type it: _type_
-        :param prefix: _description_, defaults to ""
-        :type prefix: str, optional
-        :param size: _description_, defaults to 60
-        :type size: int, optional
-        :param out: _description_, defaults to sys.stdout
-        :type out: _type_, optional
-        :yield: _description_
-        :rtype: _type_
-        """
-        count = len(it)
-
-        def show(j):
-            x = int(size * j / count)
-            print(f"[{u'█'*x}{('.'*(size-x))}] {j + 1}/{count + 1}",
-                  end='\r', file=sys.stdout, flush=True)
-
-        print("optimizing...")
-        show(0)
-        for i, item in enumerate(it):
-            yield item
-            show(i + 1)
-        print("\n", flush=True, file=sys.stdout)
-
     def _train(self, verbose=False):
         """training loop for pso optimization
 
@@ -365,7 +363,7 @@ class PSO(object):
         # save loss
         loss = []
 
-        iterator_range = range(1, self._iter + 1)
+        iterator_range = range(1, self._iter)
         if verbose:
             iterator_range = self._progressbar(iterator_range)
 
@@ -399,6 +397,9 @@ class PSO(object):
             # saving loss
             loss.append(global_best_val)
 
+            # add one more iter
+            self._count_iter += 1
+
         self._global_best = global_best
         self._global_best_val = global_best_val
         self._history = history
@@ -408,6 +409,34 @@ class PSO(object):
             print(f"Optimization Summary")
             print(f"    Global best position: {list(self._global_best)}")
             print(f"    Global best value: {self._global_best_val}")
+
+    def _progressbar(self, it, size=60):
+        """Simple progress bar
+
+        :param it: _description_
+        :type it: _type_
+        :param prefix: _description_, defaults to ""
+        :type prefix: str, optional
+        :param size: _description_, defaults to 60
+        :type size: int, optional
+        :param out: _description_, defaults to sys.stdout
+        :type out: _type_, optional
+        :yield: _description_
+        :rtype: _type_
+        """
+        count = len(it)
+
+        def show(j):
+            x = int(size * j / count)
+            print(f"[{u'█'*x}{('.'*(size-x))}] {j + 1}/{count + 1}",
+                  end='\r', file=sys.stdout, flush=True)
+
+        print("optimizing...")
+        show(0)
+        for i, item in enumerate(it):
+            yield item
+            show(i + 1)
+        print("\n", flush=True, file=sys.stdout)
 
     def plot_history(self, n_points=80):
         """Plotting history for pso optimization."""
@@ -505,15 +534,15 @@ class PSO(object):
         """
         return self._history
 
-    @property
+    @ property
     def global_best_position(self):
         return self._global_best
 
-    @property
+    @ property
     def global_best_value(self):
         return self._global_best_val
 
-    @property
+    @ property
     def fit_history(self):
         return np.array(self._loss).reshape((-1,))
 

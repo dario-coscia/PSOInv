@@ -2,14 +2,14 @@ from setuptools import setup, find_packages
 
 
 meta = {}
-with open("meta.py") as fp:
+with open("psoinv/meta.py") as fp:
     exec(fp.read(), meta)
 
 # Package meta-data.
 IMPORTNAME = meta['__title__']
 PIPNAME = meta['__packagename__']
 DESCRIPTION = 'Particle Swarm Optimization for Inverse Problems'
-URL = ''
+URL = 'https://github.com/dario-coscia/PSOInv'
 MAIL = meta['__mail__']
 AUTHOR = meta['__author__']
 VERSION = meta['__version__']
