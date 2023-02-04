@@ -1,10 +1,43 @@
 # PSOInv
 Particle Swarm Optimisation for Inverse Problems
 
-## Summary
+
+## Table of contents
+* [Description](#description)
+* [Dependencies and installation](#dependencies-and-installation)
+	* [Installing from source](#installing-from-source)
+* [Mathematical Summary](#mathematical-summary)
+    * [Particle Swarm Optimization](#particle-swarm-optimization)
+    * [PSO Implementation](#pso-implementation)
+    * [Inverse Problems](#inverse-problems)
+* [Examples and Tutorials](#examples-and-tutorials)
+* [Tests](#tests)
+* [Authors and contributors](#authors-and-contributors)
+* [How to contribute](#how-to-contribute)
+	* [Submitting a patch](#submitting-a-patch)
+* [License](#license)
+* [References](#references)
+
+## Description
+**PSOinv** is a Python package, built on Python, providing an easy interface to deal with inverse problems optimized by particle swarm optimization. Based on Numpy, PSOinv offers a simple and intuitive way to formalize a specific inverse problem and solve it using particle swarm optimization.
+
+## Dependencies and installation
+**pso** requires requires `numpy`, `sphinx` (for the documentation) and `pytest` (for local test). The code is tested for Python 3, while compatibility of Python 2 is not guaranteed anymore. It can be installed directly from the source code.
+
+### Installing from source
+The official distribution is on GitHub, and you can clone the repository using
+```bash
+> git clone https://github.com/dario-coscia/PSOInv
+```
+You can also install it using pip via
+```bash
+> python -m pip install git+https://github.com/dario-coscia/PSOInv
+```
+
+## Mathematical Summary
 In computational science, optimization is the process of finding the points that minimize a function, or set of functions, over a set. In particular, particle swarm optimization (PSO) is a particular type of optimization method. PSO finds a optimization problem solution by iteratively trying to improve a candidate solution with regard to a given measure of quality (fitness). In this repository we share the code for applying PSO to solve inverse problems.
 
-## Particle Swarm Optimization
+### Particle Swarm Optimization
 Particle Swarm Optimization is a population-based search algorithm for solving optimization problems. The PSO algorithm maintains a swarm of **particles**, where each particle represent a possible solution. In evolutionary computation paradigms, the swarm represents the population, while the single particle and individual. 
 
 Individuals in a particle swarm follow a very simple behavior: to emulate the success of neighboring individuals and their own successes. The collective behavior that emerges
@@ -64,7 +97,7 @@ pso.fit()
 
 By setting `velocity_rule=None` the default values for cognitive, social and inertia factor are used. Alternatively different values can be passed in form of dictionary. More information can be found on the documentation. The fit function is a simple numpy function applied to an array of size $N\times d$, with $d$ the dimension of the problem and $N$ the number of points in the domain.
 
-## Inverse Problems
+### Inverse Problems
 An inverse problem is a general framework that is used to convert observed measurements into information about a physical object or system that one is interested in. 
 
 In our case we consider a dynamical system described by a set of parametrical differential equation (DE), where we have measurements of the physical solution and we aim to find the parameters of the governing differential equation. Formally, consider the general form of a differential equation (for system of differential equation the formulation is analogous):
@@ -87,3 +120,75 @@ f(\hat{\alpha}) = || \pmb{u}^{real} - \pmb{\hat{u}} ||^2.
 $$
 
 This function is clearly minimized when $\hat{\alpha} = \alpha^{real}$ since the solution is unique. In our research we identified each parameter with a "spatial dimension", and each particle is a vector of the DE parameters. Hence we evolved the parameters and we search for the optimial one, minimizing $f$. In the `problems` directory you can find different applications: accellerated motion, double pendulum, lodka volterra, lorentz attractor. 
+
+## Examples and Tutorials
+The directory `problems` contains some examples showing how to use solve inverse problems using **psoinv**.
+
+## Tests
+
+In order to run the tests on the package `pytest` is needed.
+
+To tests the implementation, run on the main directory the command:
+
+```
+pytest
+```
+
+## Authors and contributors
+**psoinv** is currently developed and mantained by [Data Science and Scientific Computing](https://dssc.units.it/) master students:
+* [Dario Coscia](https://github.com/dario-coscia)
+
+Contact us by email for further information or questions about **veni**, or suggest pull requests. Contributions improving either the code or the documentation are welcome!
+
+
+## How to contribute
+We'd love to accept your patches and contributions to this project. There are just a few small guidelines you need to follow.
+
+### Submitting a patch
+
+  1. It's generally best to start by opening a new issue describing the bug or
+     feature you're intending to fix.  Even if you think it's relatively minor,
+     it's helpful to know what people are working on.  Mention in the initial
+     issue that you are planning to work on that bug or feature so that it can
+     be assigned to you.
+
+  2. Follow the normal process of [forking][] the project, and setup a new
+     branch to work in.  It's important that each group of changes be done in
+     separate branches in order to ensure that a pull request only includes the
+     commits related to that bug or feature.
+
+  3. To ensure properly formatted code, please make sure to use 4
+     spaces to indent the code. The easy way is to run on your bash the provided
+     script: ./code_formatter.sh. You should also run [pylint][] over your code.
+     It's not strictly necessary that your code be completely "lint-free",
+     but this will help you find common style issues.
+     
+  4. Do your best to have [well-formed commit messages][] for each change.
+     This provides consistency throughout the project, and ensures that commit
+     messages are able to be formatted properly by various git tools.
+
+  5. Finally, push the commits to your fork and submit a [pull request][]. Please,
+     remember to rebase properly in order to maintain a clean, linear git history.
+
+[forking]: https://help.github.com/articles/fork-a-repo
+[pylint]: https://www.pylint.org/
+[coveralls]: https://coveralls.io
+[well-formed commit messages]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+[pull request]: https://help.github.com/articles/creating-a-pull-request
+
+## Citations
+If you are considering using **psoinv** on your reaserch please cite us:
+
+```bash
+
+```
+You can also download the bibtex format from the citation widget on the sidebar
+
+## License
+
+See the [LICENSE](LICENSE.rst) file for license rights and limitations (MIT).
+
+## References
+To implement the package we follow these works:
+
+* Sengupta S, Basak S, Peters RA II. Particle Swarm Optimization: A Survey of Historical and Recent Developments with Hybridization Perspectives. Machine Learning and Knowledge Extraction. 2019; 1(1):157-191. https://doi.org/10.3390/make1010010
