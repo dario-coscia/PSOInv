@@ -1,4 +1,4 @@
-from pso import PSO
+from psoinv import PSO
 import numpy as np
 from scipy.integrate import odeint
 
