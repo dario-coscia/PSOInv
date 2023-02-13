@@ -7,19 +7,11 @@ class Scheduler(metaclass=ABCMeta):
 
     def __init__(self, velocity_rule_dict=None):
 
-        if velocity_rule_dict is None:
-            velocity_rule = {'social': 1.49445,
-                             'cognitive': 1.49445,
-                             'inertia': 0.8,
-                             }
-            self._velocity_rule_dict = velocity_rule
-            self._velocity_rule_dict_original = velocity_rule
+        # configure initial parameters
+        velocity_rule_dict = self._set_config_params(velocity_rule_dict)
 
-        else:
-            # check consistency
-            self._check_consistency_all(velocity_rule_dict, all)
-            self._velocity_rule_dict = velocity_rule_dict
-            self._velocity_rule_dict_original = velocity_rule_dict
+        self._velocity_rule_dict = velocity_rule_dict
+        self._velocity_rule_dict_original = velocity_rule_dict
 
     @abstractmethod
     def update(self, time):
@@ -27,6 +19,21 @@ class Scheduler(metaclass=ABCMeta):
 
     def __call__(self, time):
         self.update(time)
+
+    def _set_config_params(self, velocity_rule_dict):
+
+        # base velocity rule dict if None is passed
+        velocity_rule_dict_base = {'social': 1.49445,
+                                   'cognitive': 1.49445,
+                                   'inertia': 0.8,
+                                   }
+
+        # in case user passes a velocity rule dict we check consistency
+        if velocity_rule_dict is not None:
+            self._check_consistency_all(velocity_rule_dict, all)
+            velocity_rule_dict_base = velocity_rule_dict
+
+        return velocity_rule_dict_base
 
     @ property
     def parameters_dict(self):
